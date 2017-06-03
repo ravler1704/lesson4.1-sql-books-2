@@ -24,17 +24,30 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     </html>
 <?php
 
-if (isset($_GET["isbn"]) or isset($_GET["isbn"]) or isset($_GET["author"])) {
+if (isset($_GET["isbn"]) or isset($_GET["name"]) or isset($_GET["author"])) {
     $isbn = htmlspecialchars($_GET["isbn"]);
     $name = htmlspecialchars($_GET["name"]);
     $author = htmlspecialchars($_GET["author"]);
 
+    if ($isbn == null) {
+        $isbn = '*%';
+    }
+    if ($name == null) {
+        $name = '*%';
+    }
+    if ($author == null) {
+        $name = '*%';
+    }
+
     $result = $pdo->prepare("SELECT * FROM books WHERE author LIKE :author AND isbn LIKE :isbn AND name LIKE :name");
+    // если :author не существует, надо чтобы выдавались книги всех авторов
     $result->bindValue(':author', $author, PDO::PARAM_STR);
     $result->bindValue(':isbn', $isbn, PDO::PARAM_STR);
     $result->bindValue(':name', $name, PDO::PARAM_STR);
     $result->execute();
     $rowsArray = $result->fetchAll();
+
+
 } else {
     $result = $pdo->prepare('SELECT * FROM books');
     $result->execute();
