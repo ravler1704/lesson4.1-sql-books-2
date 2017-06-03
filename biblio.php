@@ -36,7 +36,7 @@ if (isset($_GET["isbn"]) or isset($_GET["name"]) or isset($_GET["author"])) {
         $name = '*%';
     }
     if ($author == null) {
-        $name = '*%';
+        $author = '*%';
     }
 
     $result = $pdo->prepare("SELECT * FROM books WHERE author LIKE :author AND isbn LIKE :isbn AND name LIKE :name");
